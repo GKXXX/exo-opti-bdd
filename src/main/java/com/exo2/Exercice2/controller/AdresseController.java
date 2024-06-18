@@ -3,6 +3,7 @@ package com.exo2.Exercice2.controller;
 import com.exo2.Exercice2.dto.AdresseDto;
 import com.exo2.Exercice2.service.AdresseService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,18 +16,21 @@ public class AdresseController {
     private AdresseService adresseService;
 
     @GetMapping("/{id}")
+    @Cacheable(value = "adresseListId",key = "#adresse_id")
     public ResponseEntity<AdresseDto> findById(@PathVariable Long id)
     {
         return ResponseEntity.ok(adresseService.findById(id));
     }
 
     @GetMapping
+    @Cacheable(value = "adresseList")
     public ResponseEntity<List<AdresseDto>> findAll()
     {
         return ResponseEntity.ok(adresseService.findAll());
     }
 
     @GetMapping("/findBy")
+    @Cacheable(value = "adresseListVille",key = "#ville")
     public ResponseEntity<List<AdresseDto>> findBy(@RequestParam String ville) {
         return ResponseEntity.ok(adresseService.findByVille(ville));
     }
